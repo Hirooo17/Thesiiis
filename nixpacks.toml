@@ -2,14 +2,15 @@
 # Veritas.AI - Audio Deepfake Detection
 
 # We manually define phases to ensure all packages are present
-# This avoids "python not found" errors by explicitly including it
+# We use ensurepip to bootstrap pip since the nix python package might be bare
 
 [phases.setup]
-nixPkgs = ["python310", "python310Packages.pip", "nodejs-18_x", "ffmpeg", "libsndfile", "gcc"]
+nixPkgs = ["python310", "nodejs-18_x", "ffmpeg", "libsndfile", "gcc"]
 
 [phases.install]
 cmds = [
-    "npm ci",
+    "npm install",
+    "python -m ensurepip --default-pip",
     "python -m pip install --upgrade pip",
     "python -m pip install -r requirements.txt"
 ]
