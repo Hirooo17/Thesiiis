@@ -1,20 +1,23 @@
 # Nixpacks configuration for Railway deployment
 # Veritas.AI - Audio Deepfake Detection
 
+providers = ["python", "node"]
+
 [phases.setup]
-nixPkgs = ["python310", "nodejs-18_x", "ffmpeg", "libsndfile"]
+nixPkgs = ["python310", "python310Packages.pip", "nodejs-18_x", "ffmpeg", "libsndfile"]
 
 [phases.install]
 cmds = [
     "npm install",
-    "pip install -r requirements.txt"
+    "python -m pip install --upgrade pip",
+    "python -m pip install -r requirements.txt"
 ]
 
 [phases.build]
 cmds = ["npm run build"]
 
 [start]
-cmd = "gunicorn app:app --bind 0.0.0.0:$PORT --timeout 120 --workers 2"
+cmd = "python -m gunicorn app:app --bind 0.0.0.0:$PORT --timeout 120 --workers 2"
 
 [variables]
 PYTHON_VERSION = "3.10"
