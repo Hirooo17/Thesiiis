@@ -1,8 +1,8 @@
 # Nixpacks configuration for Railway deployment
 # Veritas.AI - Audio Deepfake Detection
 
-# We manually define phases to ensure all packages are present
-# We use ensurepip to bootstrap pip since the nix python package might be bare
+# We use a virtual environment to avoid "externally-managed-environment" errors
+# This is the standard way to handle Python dependencies in Nix
 
 [phases.setup]
 nixPkgs = ["python310", "nodejs-18_x", "ffmpeg", "libsndfile", "gcc"]
@@ -10,13 +10,12 @@ nixPkgs = ["python310", "nodejs-18_x", "ffmpeg", "libsndfile", "gcc"]
 [phases.install]
 cmds = [
     "npm install",
-    "python -m ensurepip --default-pip",
-    "python -m pip install --upgrade pip",
-    "python -m pip install -r requirements.txt"
+    "python -m venv .venv",
+    ".venv/bin/pip install -r requirements.txt"
 ]
 
 [phases.build]
 cmds = ["npm run build"]
 
 [start]
-cmd = "gunicorn app:app --bind 0.0.0.0:$PORT --timeout 120 --workers 2"
+cmd = ".venv/bin/gunicorn app:app --bind 0.0.0.0:$PORT --timeout 120 --workers 2"
