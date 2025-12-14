@@ -7,18 +7,11 @@ providers = ["python", "node"]
 nixPkgs = ["ffmpeg", "libsndfile"]
 
 [phases.install]
-cmds = [
-    "npm ci || npm install",
-    "pip install --upgrade pip",
-    "pip install -r requirements.txt"
-]
+dependsOn = ["setup"]
 
 [phases.build]
+dependsOn = ["install"]
 cmds = ["npm run build"]
 
 [start]
 cmd = "gunicorn app:app --bind 0.0.0.0:$PORT --timeout 120 --workers 2"
-
-[variables]
-NIXPACKS_PYTHON_VERSION = "3.10"
-NIXPACKS_NODE_VERSION = "18"
