@@ -1,16 +1,20 @@
 # Nixpacks configuration for Railway deployment
 # Veritas.AI - Audio Deepfake Detection
 
-providers = ["python", "node"]
+# We manually define phases to ensure all packages are present
+# This avoids "python not found" errors by explicitly including it
 
 [phases.setup]
-nixPkgs = ["ffmpeg", "libsndfile"]
+nixPkgs = ["python310", "python310Packages.pip", "nodejs-18_x", "ffmpeg", "libsndfile", "gcc"]
 
 [phases.install]
-dependsOn = ["setup"]
+cmds = [
+    "npm ci",
+    "python -m pip install --upgrade pip",
+    "python -m pip install -r requirements.txt"
+]
 
 [phases.build]
-dependsOn = ["install"]
 cmds = ["npm run build"]
 
 [start]
