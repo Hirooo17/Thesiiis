@@ -5,8 +5,8 @@
 providers = ["python", "node"]
 
 [phases.setup]
-# Only system dependencies here. Python/Node are handled by providers.
-nixPkgs = ["ffmpeg", "libsndfile", "gcc", "zlib", "glib"]
+# Include gcc and stdenv libraries for TensorFlow's C++ dependencies
+nixPkgs = ["ffmpeg", "libsndfile", "gcc", "zlib", "glib", "stdenv.cc.cc.lib"]
 
 [phases.install]
 cmds = [
@@ -19,13 +19,14 @@ cmds = [
 cmds = ["npm run build"]
 
 [start]
-cmd = ".venv/bin/gunicorn app:app --bind 0.0.0.0:$PORT --timeout 300 --workers 1 --threads 8"
+cmd = "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/.nix-profile/lib .venv/bin/gunicorn app:app --bind 0.0.0.0:$PORT --timeout 300 --workers 1 --threads 8"
 
 [variables]
 NIXPACKS_PYTHON_VERSION = "3.10"
 NIXPACKS_NODE_VERSION = "18"
 CUDA_VISIBLE_DEVICES = "-1"
 TF_CPP_MIN_LOG_LEVEL = "2"
+LD_LIBRARY_PATH = "/root/.nix-profile/lib:/nix/var/nix/profiles/default/lib"
 
 [variables]
 NIXPACKS_PYTHON_VERSION = "3.10"
