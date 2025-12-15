@@ -27,9 +27,3 @@ NIXPACKS_NODE_VERSION = "18"
 CUDA_VISIBLE_DEVICES = "-1"
 TF_CPP_MIN_LOG_LEVEL = "2"
 LD_LIBRARY_PATH = "/root/.nix-profile/lib:/nix/var/nix/profiles/default/lib"
-
-[variables]
-NIXPACKS_PYTHON_VERSION = "3.10"
-NIXPACKS_NODE_VERSION = "18"
-CUDA_VISIBLE_DEVICES = "-1"
-TF_CPP_MIN_LOG_LEVEL = "2"
