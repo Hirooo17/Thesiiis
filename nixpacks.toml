@@ -1,15 +1,16 @@
 # Nixpacks configuration for Railway deployment
 # Veritas.AI - Audio Deepfake Detection
 
-# We use a virtual environment to avoid "externally-managed-environment" errors
-# This is the standard way to handle Python dependencies in Nix
+# Use providers to ensure correct environment setup (LD_LIBRARY_PATH, etc.)
+providers = ["python", "node"]
 
 [phases.setup]
-nixPkgs = ["python310", "nodejs-18_x", "ffmpeg", "libsndfile", "gcc"]
+# Only system dependencies here. Python/Node are handled by providers.
+nixPkgs = ["ffmpeg", "libsndfile", "gcc", "zlib", "glib"]
 
 [phases.install]
 cmds = [
-    "npm install",
+    "npm ci",
     "python -m venv .venv",
     ".venv/bin/pip install --no-cache-dir -r requirements.txt"
 ]
@@ -19,6 +20,12 @@ cmds = ["npm run build"]
 
 [start]
 cmd = ".venv/bin/gunicorn app:app --bind 0.0.0.0:$PORT --timeout 300 --workers 1 --threads 8"
+
+[variables]
+NIXPACKS_PYTHON_VERSION = "3.10"
+NIXPACKS_NODE_VERSION = "18"
+CUDA_VISIBLE_DEVICES = "-1"
+TF_CPP_MIN_LOG_LEVEL = "2"
 
 [variables]
 NIXPACKS_PYTHON_VERSION = "3.10"
