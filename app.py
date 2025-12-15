@@ -55,7 +55,7 @@ except Exception:
 # Serve React build from 'dist' folder
 app = Flask(__name__, static_folder='dist', static_url_path='')
 CORS(app)
-app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50MB max upload
+app.config['MAX_CONTENT_LENGTH'] = 500 * 1024 * 1024  # 500MB max upload
 
 # ==========================================
 # ⚙️ SETTINGS
