@@ -19,7 +19,7 @@ cmds = [
 cmds = ["npm run build"]
 
 [start]
-cmd = "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/.nix-profile/lib .venv/bin/gunicorn app:app --bind 0.0.0.0:$PORT --timeout 300 --workers 1 --threads 8"
+cmd = "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/root/.nix-profile/lib .venv/bin/gunicorn app:app --bind 0.0.0.0:$PORT --timeout 600 --workers 1 --threads 4"
 
 [variables]
 NIXPACKS_PYTHON_VERSION = "3.10"

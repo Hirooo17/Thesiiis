@@ -1270,6 +1270,10 @@ def api_upload_model():
     filepath = os.path.join(UPLOAD_FOLDER, filename)
     file.save(filepath)
     
+    # Free up memory after upload before loading model
+    del file
+    gc.collect()
+    
     # Load the model
     success, result = load_model_file(filepath, mtype)
     
